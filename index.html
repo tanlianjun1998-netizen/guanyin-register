@@ -134,16 +134,16 @@ margin-top:12px;
 <script>
 
 const pricePerName = 15;
-
 const url = "https://script.google.com/macros/s/AKfycbwxHVN5ik0ZOyzfjdHwh6V8IFeIGi_tSKoAHPwuS3jVs77SC2DBIu96tmPu9aVCIp39/exec";
 
 const form = document.getElementById("guanyinForm");
+const contactInput = document.getElementById("contact");
+const phoneInput = document.getElementById("phone");
 const namesInput = document.getElementById("names");
 const countSpan = document.getElementById("count");
 const totalSpan = document.getElementById("total");
-const submitBtn = document.getElementById("submitBtn");
 
-function updateTotal(){
+namesInput.addEventListener("input", function(){
 
 const names = namesInput.value
 .split("\n")
@@ -153,11 +153,9 @@ const names = namesInput.value
 countSpan.innerText = names.length;
 totalSpan.innerText = names.length * pricePerName;
 
-}
+});
 
-namesInput.addEventListener("input",updateTotal);
-
-form.addEventListener("submit", async function(e){
+form.addEventListener("submit", function(e){
 
 e.preventDefault();
 
@@ -166,26 +164,23 @@ const phone = phoneInput.value.trim();
 
 const names = namesInput.value
 .split("\n")
-.map(v => v.trim())
-.filter(v => v !== "");
+.map(v=>v.trim())
+.filter(v=>v!="");
 
-if(contact === ""){
+if(contact===""){
 alert("请输入联系人姓名");
 return;
 }
 
-if(phone === ""){
+if(phone===""){
 alert("请输入联系电话");
 return;
 }
 
-if(names.length === 0){
-alert("请填写至少一个观音衣名字");
+if(names.length===0){
+alert("请填写观音衣名字");
 return;
 }
-
-submitBtn.disabled = true;
-submitBtn.innerText = "提交中...";
 
 const formData = new FormData();
 formData.append("contact", contact);
@@ -193,9 +188,7 @@ formData.append("phone", phone);
 formData.append("names", names.join("\n"));
 formData.append("total", totalSpan.innerText);
 
-try{
-
-await fetch(url,{
+fetch(url,{
 method:"POST",
 body:formData,
 mode:"no-cors"
@@ -207,17 +200,7 @@ form.reset();
 countSpan.innerText = 0;
 totalSpan.innerText = 0;
 
-}catch(err){
-
-alert("提交失败");
-
-}
-
-submitBtn.disabled = false;
-submitBtn.innerText = "提交报名";
-
 });
-
 </script>
 
 </body>
