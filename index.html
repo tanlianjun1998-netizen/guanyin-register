@@ -157,39 +157,43 @@ totalSpan.innerText = names.length * pricePerName;
 
 namesInput.addEventListener("input",updateTotal);
 
-form.addEventListener("submit", async function(e) {
+form.addEventListener("submit", async function(e){
 
-  e.preventDefault();
+e.preventDefault();
 
-  if(contactInput.value.trim()===""){
-    alert("请输入联系人姓名");
-    return;
-  }
+const contact = contactInput.value.trim();
+const phone = phoneInput.value.trim();
 
-  if(phoneInput.value.trim()===""){
-    alert("请输入联系电话");
-    return;
-  }
+const names = namesInput.value
+.split("\n")
+.map(v => v.trim())
+.filter(v => v !== "");
 
-  const names = namesInput.value
-  .split("\n")
-  .map(v=>v.trim())
-  .filter(v=>v!="");
+if(contact === ""){
+alert("请输入联系人姓名");
+return;
+}
 
-  if(names.length===0){
-    alert("请填写至少一个观音衣名字");
-    return;
-  }
+if(phone === ""){
+alert("请输入联系电话");
+return;
+}
 
-submitBtn.disabled=true;
-submitBtn.innerText="提交中...";
+if(names.length === 0){
+alert("请填写至少一个观音衣名字");
+return;
+}
 
-const formData=new FormData();
+submitBtn.disabled = true;
+submitBtn.innerText = "提交中...";
 
-formData.append("contact",document.getElementById("contact").value);
-formData.append("phone",document.getElementById("phone").value);
-formData.append("names",namesInput.value);
-formData.append("total",totalSpan.innerText);
+const formData = new FormData();
+formData.append("contact", contact);
+formData.append("phone", phone);
+formData.append("names", names.join("\n"));
+formData.append("total", totalSpan.innerText);
+
+try{
 
 await fetch(url,{
 method:"POST",
@@ -200,12 +204,17 @@ mode:"no-cors"
 alert("报名成功");
 
 form.reset();
+countSpan.innerText = 0;
+totalSpan.innerText = 0;
 
-countSpan.innerText=0;
-totalSpan.innerText=0;
+}catch(err){
 
-submitBtn.disabled=false;
-submitBtn.innerText="提交报名";
+alert("提交失败");
+
+}
+
+submitBtn.disabled = false;
+submitBtn.innerText = "提交报名";
 
 });
 
