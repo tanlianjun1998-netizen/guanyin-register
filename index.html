@@ -3,88 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>观音衣在线报名</title>
+<title>观音衣报名</title>
 
 <style>
+
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
-font-family:Arial,sans-serif;
-background:linear-gradient(to bottom,#b22222,#ffcc99);
+font-family:"Noto Sans SC",Arial,sans-serif;
+background:linear-gradient(180deg,#8b0000,#ffcc66);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
 }
 
-.wrapper{
-max-width:600px;
-margin:20px auto;
-padding:16px;
-}
+/* 卡片 */
 
 .card{
-background:#fff;
-border-radius:16px;
-padding:20px;
-box-shadow:0 8px 24px rgba(0,0,0,0.15);
+background:white;
+width:100%;
+max-width:520px;
+border-radius:20px;
+padding:24px;
+box-shadow:0 15px 40px rgba(0,0,0,0.25);
 }
 
 h1{
 text-align:center;
 color:#b22222;
-margin-top:0;
+margin:0;
 }
 
 .top{
 text-align:center;
-color:#666;
-margin-top:-6px;
+color:#777;
+margin:8px 0 20px;
+font-size:14px;
 }
 
-label{
-display:block;
+/* 输入 */
+
+label.main{
 font-weight:bold;
-margin:12px 0 6px;
-}
-
-input, textarea{
-width:100%;
-box-sizing:border-box;
-padding:12px;
-border:1px solid #ccc;
-border-radius:10px;
-font-size:16px;
-}
-
-textarea{
-resize:vertical;
-}
-
-.info{
 margin-top:14px;
-font-size:18px;
-font-weight:bold;
-color:green;
+display:block;
 }
 
-button{
+input[type="text"],
+input[type="tel"]{
 width:100%;
-margin-top:18px;
 padding:14px;
-font-size:18px;
-border:none;
-border-radius:10px;
-background:#b22222;
-color:#fff;
+border-radius:12px;
+border:1px solid #ddd;
+font-size:16px;
+margin-top:6px;
+}
+
+/* 名字行 */
+
+.nameRow{
+display:flex;
+gap:10px;
+margin-top:12px;
+align-items:center;
+flex-wrap:wrap;
+}
+
+.nameInput{
+flex:1;
+min-width:150px;
+}
+
+/* 合家按钮 */
+
+.family{
+display:flex;
+align-items:center;
+gap:6px;
+padding:8px 12px;
+background:#ffeaea;
+border:1px solid #ffbaba;
+border-radius:12px;
+font-weight:bold;
+color:#b22222;
 cursor:pointer;
 }
 
-button:disabled{
-opacity:.6;
-cursor:not-allowed;
+.family input{
+transform:scale(1.7);
+}
+
+/* 删除 */
+
+.removeBtn{
+background:#e74c3c;
+border:none;
+color:white;
+padding:10px 14px;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* 添加按钮 */
+
+.addBtn{
+width:100%;
+margin-top:14px;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#444;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+/* 提交按钮 */
+
+.submitBtn{
+width:100%;
+margin-top:18px;
+padding:16px;
+border:none;
+border-radius:14px;
+background:#b22222;
+color:white;
+font-size:20px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* 信息 */
+
+.info{
+margin-top:12px;
+font-weight:bold;
+color:#b22222;
+font-size:18px;
 }
 
 .note{
 text-align:center;
 font-size:13px;
 color:#777;
-margin-top:12px;
+margin-top:10px;
+}
+
+/* 手机优化 */
+
+@media(max-width:480px){
+
+.card{
+padding:18px;
+}
+
+.nameRow{
+flex-direction:column;
+align-items:stretch;
+}
+
+.family{
+justify-content:center;
+font-size:18px;
+}
+
+.removeBtn{
+width:100%;
+}
+
 }
 
 </style>
@@ -92,80 +183,125 @@ margin-top:12px;
 
 <body>
 
-<div class="wrapper">
 <div class="card">
 
-<h1>观音衣在线报名</h1>
+<h1>观音衣报名</h1>
 <p class="top">每个名字 RM15</p>
 
-<form id="guanyinForm">
+<form id="form">
 
-<label>联系人姓名 *</label>
+<label class="main">联系人姓名 *</label>
 <input type="text" id="contact" required>
 
-<label>联系电话 *</label>
-<input type="tel" id="phone" required pattern="[0-9]{9,11}">
+<label class="main">联系电话 *</label>
+<input type="tel" id="phone" required>
 
-<label>观音衣名字（每行一个） *</label>
-<textarea id="names" rows="6" required placeholder="例如：
-名字（合家）"></textarea>
+<label class="main">观音衣名字 *</label>
 
-<div class="info">
-名字数量：<span id="count">0</span>
+<div id="namesContainer">
+
+<div class="nameRow">
+
+<input type="text" class="nameInput" placeholder="请输入名字">
+
+<label class="family">
+<input type="checkbox" class="familyCheck"> 合家
+</label>
+
+<button type="button" class="removeBtn" onclick="removeRow(this)">删除</button>
+
 </div>
 
-<div class="info">
-总费用：RM <span id="total">0</span>
 </div>
 
-<button type="submit" id="submitBtn">
-提交报名
-</button>
+<button type="button" class="addBtn" onclick="addRow()">➕ 添加名字</button>
+
+<div class="info">名字数量：<span id="count">0</span></div>
+<div class="info">总费用：RM <span id="total">0</span></div>
+
+<button type="submit" class="submitBtn">提交报名</button>
 
 </form>
 
-<div class="note">
-提交后资料会自动保存到 Google Sheets
-</div>
+<p class="note">提交后资料会自动保存到 Google Sheets</p>
 
-</div>
 </div>
 
 <script>
 
-const pricePerName = 15;
-const url = "https://script.google.com/macros/s/AKfycbwxHVN5ik0ZOyzfjdHwh6V8IFeIGi_tSKoAHPwuS3jVs77SC2DBIu96tmPu9aVCIp39/exec";
+const price=15;
 
-const form = document.getElementById("guanyinForm");
-const contactInput = document.getElementById("contact");
-const phoneInput = document.getElementById("phone");
-const namesInput = document.getElementById("names");
-const countSpan = document.getElementById("count");
-const totalSpan = document.getElementById("total");
+const url="https://script.google.com/macros/s/AKfycbwxHVN5ik0ZOyzfjdHwh6V8IFeIGi_tSKoAHPwuS3jVs77SC2DBIu96tmPu9aVCIp39/exec";
 
-namesInput.addEventListener("input", function(){
+const container=document.getElementById("namesContainer");
+const countSpan=document.getElementById("count");
+const totalSpan=document.getElementById("total");
 
-const names = namesInput.value
-.split("\n")
-.map(v=>v.trim())
-.filter(v=>v!="");
+function updateTotal(){
 
-countSpan.innerText = names.length;
-totalSpan.innerText = names.length * pricePerName;
+const rows=document.querySelectorAll(".nameRow");
+
+let count=0;
+
+rows.forEach(row=>{
+const name=row.querySelector(".nameInput").value.trim();
+if(name!=="") count++;
+});
+
+countSpan.innerText=count;
+totalSpan.innerText=count*price;
+
+}
+
+function addRow(){
+
+const div=document.createElement("div");
+
+div.className="nameRow";
+
+div.innerHTML=`
+<input type="text" class="nameInput" placeholder="请输入名字">
+
+<label class="family">
+<input type="checkbox" class="familyCheck"> 合家
+</label>
+
+<button type="button" class="removeBtn" onclick="removeRow(this)">删除</button>
+`;
+
+container.appendChild(div);
+
+}
+
+function removeRow(btn){
+
+const rows=document.querySelectorAll(".nameRow");
+
+if(rows.length===1){
+btn.parentElement.querySelector(".nameInput").value="";
+btn.parentElement.querySelector(".familyCheck").checked=false;
+}else{
+btn.parentElement.remove();
+}
+
+updateTotal();
+
+}
+
+document.addEventListener("input",function(e){
+
+if(e.target.classList.contains("nameInput")){
+updateTotal();
+}
 
 });
 
-form.addEventListener("submit", function(e){
+document.getElementById("form").addEventListener("submit",function(e){
 
 e.preventDefault();
 
-const contact = contactInput.value.trim();
-const phone = phoneInput.value.trim();
-
-const names = namesInput.value
-.split("\n")
-.map(v=>v.trim())
-.filter(v=>v!="");
+const contact=document.getElementById("contact").value.trim();
+const phone=document.getElementById("phone").value.trim();
 
 if(contact===""){
 alert("请输入联系人姓名");
@@ -177,16 +313,37 @@ alert("请输入联系电话");
 return;
 }
 
+const rows=document.querySelectorAll(".nameRow");
+
+let names=[];
+
+rows.forEach(row=>{
+
+let name=row.querySelector(".nameInput").value.trim();
+
+const family=row.querySelector(".familyCheck").checked;
+
+if(name!==""){
+
+if(family) name+="（合家）";
+
+names.push(name);
+
+}
+
+});
+
 if(names.length===0){
-alert("请填写观音衣名字");
+alert("请填写至少一个名字");
 return;
 }
 
-const formData = new FormData();
-formData.append("contact", contact);
-formData.append("phone", phone);
-formData.append("names", names.join("\n"));
-formData.append("total", totalSpan.innerText);
+const formData=new FormData();
+
+formData.append("contact",contact);
+formData.append("phone",phone);
+formData.append("names",names.join("\n"));
+formData.append("total",names.length*price);
 
 fetch(url,{
 method:"POST",
@@ -196,11 +353,10 @@ mode:"no-cors"
 
 alert("报名成功");
 
-form.reset();
-countSpan.innerText = 0;
-totalSpan.innerText = 0;
+location.reload();
 
 });
+
 </script>
 
 </body>
